@@ -51,6 +51,7 @@ to click a square on a simple matching games. The application is a matching game
  due to prolonged screen activity.
 
  ![Diagram](Block_Diagram.png)
+ 
  A generic overview of what our team hopes to accomplish. Depending on the
  progress made throughout the semester, this approach may be modified to implement
  other uses of the eye-tracking technology.
