@@ -74,7 +74,7 @@ to click a square on a simple matching games. The application is a matching game
  for all of the team using machine learning together with GUI development.
 
 ###### Roles:
-* Sam Aba - Camera Integration Lead
+* Sam Aba - General Discussion, Code Implementation, Camera Integration
 * Chandler Brooks - Code Implementation, Debugging
 * Heather Haynie - General Discussion, Code Implementation, Preliminary Reasearch
 * Matthew Scarfo - General Discussion, Code Implementation
