@@ -50,9 +50,10 @@ to click a square on a simple matching games. The application is a matching game
  data using machine learning to analyze eye movements op potential eye strain
  due to prolonged screen activity.
 
- ![A generic overview of what our team hopes to accomplish. Depending on the
+ ![Diagram](Block_Diagram.png)
+ A generic overview of what our team hopes to accomplish. Depending on the
  progress made throughout the semester, this approach may be modified to implement
- other uses of the eye-tracking technology.](Block_Diagram.png)
+ other uses of the eye-tracking technology.
 
  A minimal system that has some value to the customer would be an eye-tracking/
  monitoring system that potentially detects symptoms of eye-strain and notifies
