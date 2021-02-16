@@ -79,7 +79,7 @@ to click a square on a simple matching games. The application is a matching game
 * Heather Haynie - General Discussion, Code Implementation, Preliminary Reasearch
 * Matthew Scarfo - General Discussion, Code Implementation
 
-Rotating the roles will be determined by the progress of team meetings.
+Rotation of leading roles will be determined by the progress of team meetings.
 
 ### Project Management
 The completion of the system will be feasible. Progress will be monitored through
@@ -98,7 +98,8 @@ The completion of the system will be feasible. Progress will be monitored throug
 | Mar 29 - April 2 | Submit status report 3 |
 
 ###### Constraints and Resources:
-There are currently no known constraints for the system. Data will be collected
+Do to use of device cameras, this would be a legal constraint. However, since the software is for the internal
+use of the team, it is not an issue at this time. Data will be collected
 using machine learning. Online resources will be crucial to guide our implementation.
 The project can approach different solutions depending on progress made and
 time constraints. Successful implementation of the eye-tracking software will
