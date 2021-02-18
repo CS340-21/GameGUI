@@ -56,14 +56,17 @@ to click a square on a simple matching games. The application is a matching game
  progress made throughout the semester, this approach may be modified to implement
  other uses of the eye-tracking technology.
 
- A minimal system that has some value to the customer would be an eye-tracking/
+ A minimal system that has some value to the customer would be a GUI with functional
+ game logic that stores mouse cursor data. Extensions of the system might include an eye-tracking/
  monitoring system that potentially detects symptoms of eye-strain and notifies
  the user when it's a good idea to take a break or turn down the brightness on
  the screen. Implementations of the cursor throughout multiple applications,
  customizable cursor settings for cursor speed, clicking, and scrolling are a
  few examples of possible enhancements that customers would value. The testing
- of the system will be performed by setting milestones and modifying the approach
- as the project is completed. The project will be implemented by using pre-existing
+ of the system will be performed using the development team as test subjects. The implementation
+ will have the game logic checked for correctness and camera implementation checked for usefulness 
+ by the testers (and possibly a tester program to run through many possible inputs
+ in a short amount of time). The project will be implemented by using pre-existing
  Python libraries, like Pandas, PyAutoGUI, and PySimpleGUI, to help with the
  development process of the project.
 
@@ -74,15 +77,15 @@ to click a square on a simple matching games. The application is a matching game
  for all of the team using machine learning together with GUI development.
 
 ###### Roles:
-* Sam Aba - General Discussion, Code Implementation, Camera Integration
+* Sam Aba - General Discussion, Code Implementation, Camera Integration (Current Customer)
 * Chandler Brooks - Code Implementation, Debugging
-* Heather Haynie - General Discussion, Code Implementation, Preliminary Reasearch
+* Heather Haynie - General Discussion, Code Implementation, Preliminary Reasearch (Current Organizer and Customer)
 * Matthew Scarfo - General Discussion, Code Implementation
 
 Rotation of leading roles will be determined by the progress of team meetings.
 
 ### Project Management
-The completion of the system will be feasible. Progress will be monitored through
+The completion of a minimal system will be feasible. Progress will be monitored through
  online meetings held once a week on Mondays.
 
 ###### Schedule:
@@ -98,7 +101,7 @@ The completion of the system will be feasible. Progress will be monitored throug
 | Mar 29 - April 2 | Submit status report 3 |
 
 ###### Constraints and Resources:
-Do to use of device cameras, this would be a legal constraint. However, since the software is for the internal
+Due to use of device cameras, this would be a legal constraint. However, since the software is for the internal
 use of the team, it is not an issue at this time. Data will be collected
 using machine learning. Online resources will be crucial to guide our implementation.
 The project can approach different solutions depending on progress made and
