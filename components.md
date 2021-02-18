@@ -3,6 +3,7 @@
 * Have control of built-in camera
 * Functional GUI
 * GUI collects data
+* Game logic
 
 #### Cursor Control:
 Be able to move cursor around screen by programming.
@@ -15,6 +16,10 @@ Save and store images.
 #### GUI:
 Create a GUI that generates any number of quadrants.
 When quadrant is clicked, stores quadrant location, cursor location, and saves camera image.
+
+#### Game Logic:
+Create a matching game that creates a randomized board for each game. Create a scoring system.
+Correct matches remain visible. Incorrect matches get "flipped" back over.
 
 #### Data Collection:
 Create a dataset of information from GUI.
