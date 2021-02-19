@@ -67,7 +67,8 @@ to click a square on a simple matching games. The application is a matching game
  will have the game logic checked for correctness and camera implementation checked for usefulness 
  by the testers (and possibly a tester program to run through many possible inputs
  in a short amount of time). The project will be implemented by using pre-existing
- Python libraries, like Pandas, PyAutoGUI, and PySimpleGUI, to help with the
+ Python libraries, like Pandas (store data), PyAutoGUI (mouse cursor control), PyGaze (eye tracking), 
+ CV2 or SimpleCV (camera image capture), and PySimpleGUI (GUI construction), to help with the
  development process of the project.
 
  ### Team
@@ -77,10 +78,10 @@ to click a square on a simple matching games. The application is a matching game
  for all of the team using machine learning together with GUI development.
 
 ###### Roles:
-* Sam Aba - General Discussion, Code Implementation, Camera Integration (Current Customer)
-* Chandler Brooks - Code Implementation, Debugging
-* Heather Haynie - General Discussion, Code Implementation, Preliminary Reasearch (Current Organizer and Customer)
-* Matthew Scarfo - General Discussion, Code Implementation
+* Sam Aba - Camera Integration, Eye Gaze (Current Customer)
+* Chandler Brooks - GUI Implementation
+* Heather Haynie - Machine Learning, Eye Gaze (Current Organizer and Customer)
+* Matthew Scarfo - Game Logic, Machine Learning
 
 Rotation of leading roles will be determined by the progress of team meetings.
 
