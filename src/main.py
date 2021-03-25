@@ -2,10 +2,25 @@ from tkinter import *
 
 # format input strings
 root = Tk()
-root.geometry("600x500")
+root.geometry("800x500")
 numItems = 0
 checklist = []
 
+# it SHOULD delete everything that was checked...not yet working right
+def removeAll():
+    i=0
+    while i < len(checklist):
+        if checklist[i].var.get() == 1:
+            checklist[i].c.destroy()
+            checklist.pop(i)
+        i += 1
+
+# A warning pops up before deletion
+def removeEntry():
+    warning = Tk()
+    l   = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column = 1)
+    no  = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
+    yes = Button(warning, text="Yes", padx=100, command=removeAll).grid(row=1, column=0)
 
 def editEntry():
     editWindow = Tk()
@@ -24,8 +39,10 @@ def enableEdit():
     for i in checklist:
         if i.var.get() == 1:
             editButton.config(state=NORMAL)
+            removeButton.config(state=NORMAL)
             break
         editButton.config(state=DISABLED)
+        removeButton.config(state=DISABLED)
 
 # Currently stores an individual checkbox, will later store dates
 class entry():
@@ -61,14 +78,17 @@ def addItem():
 # If there are no tasks left, print a congratulations
 if numItems == 0:
     noWork = Label(root, text="You've finished all of your work. Great job!")
-    noWork.grid(row=0, column=3)
+    noWork.grid(row=0, column=0)
 
 # If user pushes this button, they can add a new entry to the list
 newEntry = Button(root, text="New Entry", padx=50, command=addItem)
-newEntry.grid(row=8, column=8)
+newEntry.grid(row=8, column=3)
 
 # This button allows you to edit an entry
 editButton = Button(root, text="Edit Entry(s)", padx=50, state=DISABLED, command=editEntry)
-editButton.grid(row=8, column=6)
+editButton.grid(row=8, column=2)
+
+removeButton = Button(root, text="Remove Entry(s)", padx=50, state=DISABLED, command=removeEntry)
+removeButton.grid(row=8, column=1)
 
 root.mainloop()
