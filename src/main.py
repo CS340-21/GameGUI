@@ -1,26 +1,27 @@
 from tkinter import *
 
-# format input strings
 root = Tk()
 root.geometry("800x500")
 numItems = 0
 checklist = []
 
 # it SHOULD delete everything that was checked...not yet working right
-def removeAll():
-    i=0
-    while i < len(checklist):
+def removeAll(warning):
+    global numItems
+    for i in reversed(range(len(checklist))):
         if checklist[i].var.get() == 1:
             checklist[i].c.destroy()
             checklist.pop(i)
-        i += 1
+            numItems -= 1
+            continue
+    warning.destroy()
 
 # A warning pops up before deletion
 def removeEntry():
     warning = Tk()
     l   = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column = 1)
     no  = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
-    yes = Button(warning, text="Yes", padx=100, command=removeAll).grid(row=1, column=0)
+    yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0)
 
 def editEntry():
     editWindow = Tk()
