@@ -1,19 +1,48 @@
 from tkinter import *
 
+# format input strings
 root = Tk()
-root.geometry("500x500")
+root.geometry("600x500")
 numItems = 0
 checklist = []
+
+
+def editEntry():
+    editWindow = Tk()
+    editWindow.geometry("200x200")
+    indices = []
+    numChecked = 0
+    for i in checklist:
+        if i.var.get() == 1:
+            l = Label(editWindow, text=i.c.cget("text")).grid(row=numChecked, column=0)
+            e = Entry(editWindow).grid(row=numChecked, column=1)
+            numChecked += 1
+
+# This allows the user to push the edit button
+# ONLY when there is a box checked
+def enableEdit():
+    for i in checklist:
+        if i.var.get() == 1:
+            editButton.config(state=NORMAL)
+            break
+        editButton.config(state=DISABLED)
+
+# Currently stores an individual checkbox, will later store dates
+class entry():
+
+    def __init__(self, item):
+        self.var = IntVar()
+        self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
+
 
 def pushToList(item):
     global numItems
     global checklist
+
     # prints new item to main window as long as something was typed in
     if item != "":
-        var = IntVar()
-        c = Checkbutton(root, text=item, variable=var)
-        checklist.append(c)
-        checklist[numItems].grid(row=numItems, column=1)
+        checklist.append(entry(item))
+        checklist[numItems].c.grid(row=numItems, column=1)
     # remove congratulatory message if new work is added
         if numItems == 0:
             noWork.destroy()
@@ -22,13 +51,12 @@ def pushToList(item):
 # Opens a new window for the user to input a task
 def addItem():
     itemEntry = Tk()
-    itemEntry.geometry("200x100")
+    itemEntry.geometry("250x100")
     e = Entry(itemEntry)
     e.grid(row=0, column=3)
     # Button must be pushed after item is entered
-    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get()))
-    confirm.grid(row=2, column=5)
-
+    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get())).grid(row=2, column=5)
+    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=2, column=6)
 
 # If there are no tasks left, print a congratulations
 if numItems == 0:
@@ -40,11 +68,7 @@ newEntry = Button(root, text="New Entry", padx=50, command=addItem)
 newEntry.grid(row=8, column=8)
 
 # This button allows you to edit an entry
-editEntry = Button(root, text="Edit Entry", padx=50)
-for i in checklist:
-    print(i.var.get())
-    if i.var.get() == 1:
-        editEntry.grid(row=8, column=6)
-
+editButton = Button(root, text="Edit Entry(s)", padx=50, state=DISABLED, command=editEntry)
+editButton.grid(row=8, column=6)
 
 root.mainloop()
