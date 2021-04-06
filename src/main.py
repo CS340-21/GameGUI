@@ -1,6 +1,6 @@
 from tkinter import *
-from PIL import ImageTK,Image
-
+#from PIL import ImageTK,Image
+from datetime import datetime 
 
 root = Tk()
 root.geometry("800x500")
@@ -71,12 +71,23 @@ def pushToList(item):
 # Opens a new window for the user to input a task
 def addItem():
     itemEntry = Tk()
-    itemEntry.geometry("250x100")
+    itemEntry.geometry("400x400")
+    eLabel = Label(itemEntry, text="Task:").grid(row=0, column=0)
     e = Entry(itemEntry)
-    e.grid(row=0, column=3)
+    e.grid(row=0, column=1)
+    monthLabel = Label(itemEntry, text="Month:").grid(row=2, column=0)
+    month = Entry(itemEntry).grid(row=2, column=1)
+    dayLabel = Label(itemEntry, text="Day:").grid(row=3, column=0)
+    day = Entry(itemEntry).grid(row=3, column=1)
+    yearLabel = Label(itemEntry, text="Year:").grid(row=4, column=0)
+    year = Entry(itemEntry).grid(row=4, column=1)
+    hourLabel = Label(itemEntry, text="Hour:").grid(row=5, column=0)
+    hour = Entry(itemEntry).grid(row=5, column=1)
+    minLabel = Label(itemEntry, text="Minute:").grid(row=6, column=0)
+    minute = Entry(itemEntry).grid(row=6, column=1) 
     # Button must be pushed after item is entered
-    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get())).grid(row=2, column=5)
-    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=2, column=6)
+    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get())).grid(row=7, column=0)
+    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
 
 # If there are no tasks left, print a congratulations
 if numItems == 0:
