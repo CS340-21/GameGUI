@@ -1,10 +1,4 @@
-from tkinter import *
-<<<<<<< HEAD
-#from PIL import ImageTK,Image
-from datetime import datetime 
-=======
-
->>>>>>> 0fe5fea7c381a6c188033017f942b3f08db53ac2
+from tkinter import * 
 
 root = Tk()
 root.geometry("800x500")
