@@ -5,7 +5,6 @@ import pickle
 root = Tk()
 root.geometry("800x500")
 root.title("Tasks to be Completed")
-numItems = 0
 checklist = []
 
 
@@ -19,10 +18,10 @@ def removeAll(warning):
             break
         if checklist[i - numRemoved].var.get() == 1:
             checklist[i - numRemoved].c.destroy()
-            numItems -= 1
             checklist.pop(i - numRemoved)
             for j in range(len(checklist)):
-                checklist[j].c.grid(row=j + 1, column=1)
+                checklist[j].c.grid(row=j + 1, column=0)
+                checklist[j].dateLabel.grid(row=j + 1, column=1)
     warning.destroy()
 
 
@@ -70,10 +69,13 @@ class dateTime():
 # Currently stores an individual checkbox, will later store dates
 class entry():
 
-    def __init__(self, item):
+    def __init__(self, item, date):
         self.var = IntVar()
         self.textstr = item
-        self.dateTime = None
+        self.dateTime = date
+        self.dateLabel = Label(text=str(self.dateTime.month) + "/" + str(self.dateTime.day) + "/" +
+                                    str(self.dateTime.year) + " " + str(self.dateTime.hour) + ":" +
+                                    str(self.dateTime.minute))
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
 
@@ -105,21 +107,14 @@ def init_dates(month, day, year, hour, minute):
 
 
 def pushToList(item, month, day, year, hour, minute):
-    global numItems
     global checklist
 
     # prints new item to main window as long as something was typed in
     if item != "":
-        e = entry(item)
-        e.dateTime = dateTime(month, day, year, hour, minute)
+        e = entry(item, dateTime(month, day, year, hour, minute))
         checklist.append(e)
-        checklist[numItems].c.grid(row=len(checklist) + 1, column=1)
-        dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
-        dateLabel.grid(row=len(checklist) + 1, column=2)
-        # remove congratulatory message if new work is added
-        if numItems == 0:
-            noWork.destroy()
-        numItems += 1
+        checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
+        checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
 
 
 # Opens a new window for the user to input a task
@@ -171,11 +166,6 @@ def saveTasks():
 
 
 loadTasks()
-
-# If there are no tasks left, print a congratulations
-if numItems == 0:
-    noWork = Label(root, text="You've finished all of your work. Great job!")
-    noWork.grid(row=0, column=0)
 
 # If user pushes this button, they can add a new entry to the list
 newEntry = Button(root, text="New Entry", padx=50, command=addItem)
