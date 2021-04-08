@@ -10,13 +10,18 @@ checklist = []
 
 # it SHOULD delete everything that was checked...not yet working right
 def removeAll(warning):
-    global numItems
-    for i in reversed(range(len(checklist))):
-        if checklist[i].var.get() == 1:
-            checklist[i].c.destroy()
-            checklist.pop(i)
+    global checklist
+
+    numRemoved = 0
+    for i in range(len(checklist)):
+        if i - numRemoved > len(checklist) - 1:
+            break
+        if checklist[i-numRemoved].var.get() == 1:
+            checklist[i-numRemoved].c.destroy()
             numItems -= 1
-            continue
+            checklist.pop(i-numRemoved)
+            for j in range(len(checklist)):
+                checklist[j].c.grid(row=j+1, column=1)
     warning.destroy()
 
 # A warning pops up before deletion
@@ -103,7 +108,7 @@ def pushToList(item, month, day, year, hour, minute):
         e = entry(item)
         e.dateTime = dateTime(month, day, year, hour, minute)
         checklist.append(e)
-        checklist[numItems].c.grid(row=numItems, column=1)
+        checklist[numItems].c.grid(row=len(checklist)+1, column=1)
         dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
         dateLabel.grid(row=numItems, column=2)
     # remove congratulatory message if new work is added
@@ -163,14 +168,14 @@ if numItems == 0:
 
 # If user pushes this button, they can add a new entry to the list
 newEntry = Button(root, text="New Entry", padx=50, command=addItem)
-newEntry.grid(row=8, column=3)
+newEntry.grid(row=0, column=3)
 
 # This button allows you to edit an entry
 editButton = Button(root, text="Edit Entry(s)", padx=50, state=DISABLED, command=editEntry)
-editButton.grid(row=8, column=2)
+editButton.grid(row=0, column=2)
 
 removeButton = Button(root, text="Remove Entry(s)", padx=50, state=DISABLED, command=removeEntry)
-removeButton.grid(row=8, column=1)
+removeButton.grid(row=0, column=1)
 
 root.mainloop()
 
