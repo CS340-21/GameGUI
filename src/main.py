@@ -141,10 +141,14 @@ def addItem():
 
     
 def loadTasks():
-    df = pd.read_pickle('pickled.dat')
-    if not df.empty:
-        print("Not empty")
-        
+    try:
+        df = pd.read_pickle('pickled.dat')
+        if not df.empty:
+            print("Not empty")
+    except:
+        print("File does not exist")
+
+
 def saveTasks():
     df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute'])
     
