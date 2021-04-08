@@ -5,7 +5,9 @@ import pickle
 root = Tk()
 root.geometry("800x500")
 root.title("Tasks to be Completed")
+numItems = 0
 checklist = []
+
 
 # it SHOULD delete everything that was checked...not yet working right
 def removeAll(warning):
@@ -15,19 +17,22 @@ def removeAll(warning):
     for i in range(len(checklist)):
         if i - numRemoved > len(checklist) - 1:
             break
-        if checklist[i-numRemoved].var.get() == 1:
-            checklist[i-numRemoved].c.destroy()
-            checklist.pop(i-numRemoved)
+        if checklist[i - numRemoved].var.get() == 1:
+            checklist[i - numRemoved].c.destroy()
+            numItems -= 1
+            checklist.pop(i - numRemoved)
             for j in range(len(checklist)):
-                checklist[j].c.grid(row=j+1, column=1)
+                checklist[j].c.grid(row=j + 1, column=1)
     warning.destroy()
+
 
 # A warning pops up before deletion
 def removeEntry():
     warning = Tk()
-    l   = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column = 1)
-    no  = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
+    l = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column=1)
+    no = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
     yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0)
+
 
 def editEntry():
     editWindow = Tk()
@@ -40,6 +45,7 @@ def editEntry():
             e = Entry(editWindow).grid(row=numChecked, column=1)
             numChecked += 1
 
+
 # This allows the user to push the edit button
 # ONLY when there is a box checked
 def enableEdit():
@@ -50,7 +56,7 @@ def enableEdit():
             break
         editButton.config(state=DISABLED)
         removeButton.config(state=DISABLED)
-        
+
 
 class dateTime():
     def __init__(self, month, day, year, hour, minute):
@@ -59,6 +65,7 @@ class dateTime():
         self.year = year
         self.hour = hour
         self.minute = minute
+
 
 # Currently stores an individual checkbox, will later store dates
 class entry():
@@ -69,7 +76,7 @@ class entry():
         self.dateTime = None
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
-        
+
 # may not need this, waiting to run to check functionality
 def init_dates(month, day, year, hour, minute):
     try:
@@ -96,21 +103,24 @@ def init_dates(month, day, year, hour, minute):
 
     return mo, d, y, h, mi
 
-        
+
 def pushToList(item, month, day, year, hour, minute):
+    global numItems
     global checklist
-    
+
     # prints new item to main window as long as something was typed in
     if item != "":
         e = entry(item)
         e.dateTime = dateTime(month, day, year, hour, minute)
         checklist.append(e)
-        checklist[len(checklist)-1].c.grid(row=len(checklist)+1, column=1)
+        checklist[numItems].c.grid(row=len(checklist) + 1, column=1)
         dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
-        dateLabel.grid(row=len(checklist)+1, column=2)
-    # remove congratulatory message if new work is added
-        if len(checklist) == 0:
+        dateLabel.grid(row=len(checklist) + 1, column=2)
+        # remove congratulatory message if new work is added
+        if numItems == 0:
             noWork.destroy()
+        numItems += 1
+
 
 # Opens a new window for the user to input a task
 def addItem():
@@ -133,13 +143,14 @@ def addItem():
     hour.grid(row=5, column=1)
     minLabel = Label(itemEntry, text="Minute:").grid(row=6, column=0)
     minute = Entry(itemEntry)
-    minute.grid(row=6, column=1) 
+    minute.grid(row=6, column=1)
     # Button must be pushed after item is entered
     confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), month.get(),
-    day.get(), year.get(), hour.get(), minute.get())).grid(row=7, column=0)
+                                                                            day.get(), year.get(), hour.get(),
+                                                                            minute.get())).grid(row=7, column=0)
     close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
 
-    
+
 def loadTasks():
     try:
         df = pd.read_pickle('pickled.dat')
@@ -151,18 +162,18 @@ def loadTasks():
 
 def saveTasks():
     df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute'])
-    
+
     for i in checklist:
         df = df.append([{'task': i.textStr, 'month': i.dateTime.month, 'day': i.dateTime.day, 'year': i.dateTime.year,
                          'hour': i.dateTime.hour, 'minute': i.dateTime.minute}])
-    
+
     df.to_pickle('pickled.dat')
 
 
 loadTasks()
 
 # If there are no tasks left, print a congratulations
-if len(checklist) == 0:
+if numItems == 0:
     noWork = Label(root, text="You've finished all of your work. Great job!")
     noWork.grid(row=0, column=0)
 
