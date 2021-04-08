@@ -1,4 +1,6 @@
-from tkinter import * 
+from tkinter import *
+import panas as pd
+import pickle
 
 root = Tk()
 root.geometry("800x500")
@@ -45,22 +47,61 @@ def enableEdit():
             break
         editButton.config(state=DISABLED)
         removeButton.config(state=DISABLED)
+        
+class dateTime():
+    def __init__(self, month, day, year, hour, minute):
+        self.month = month
+        self.day = day
+        self.year = year
+        self.hour = hour
+        self.minute = minute
 
 # Currently stores an individual checkbox, will later store dates
 class entry():
 
     def __init__(self, item):
         self.var = IntVar()
+        self.textstr = item
+        self.dateTime = None
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
+        
+# may not need this, waiting to run to check functionality
+def init_dates(month, day, year, hour, minute):
+    try:
+        mo = month.get()
+        print(mo)
+    except:
+        mo = None
+    try:
+        d = day.get()
+    except:
+        d = None
+    try:
+        y = year.get()
+    except:
+        y = None
+    try:
+        h = hour.get()
+    except:
+        h = None
+    try:
+        mi = minute.get()
+    except:
+        mi = None
 
+    return mo, d, y, h, mi
+
+        
 def pushToList(item, month, day, year, hour, minute):
     global numItems
     global checklist
-
+    
     # prints new item to main window as long as something was typed in
     if item != "":
-        checklist.append(entry(item))
+        e = entry(item)
+        e.dateTime = dateTime(month, day, year, hour, minute)
+        checklist.append(e)
         checklist[numItems].c.grid(row=numItems, column=1)
         dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
         dateLabel.grid(row=numItems, column=2)
@@ -96,6 +137,24 @@ def addItem():
     day.get(), year.get(), hour.get(), minute.get())).grid(row=7, column=0)
     close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
 
+    
+def loadTasks():
+    df = pd.read_pickle('pickled.dat')
+    if not df.empty:
+        print("Not empty")
+        
+def saveTasks():
+    df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute'])
+    
+    for i in checklist:
+        df = df.append([{'task': i.textStr, 'month': i.dateTime.month, 'day': i.dateTime.day, 'year': i.dateTime.year,
+                         'hour': i.dateTime.hour, 'minute': i.dateTime.minute}])
+    
+    df.to_pickle('pickled.dat')
+
+
+loadTasks()
+
 # If there are no tasks left, print a congratulations
 if numItems == 0:
     noWork = Label(root, text="You've finished all of your work. Great job!")
@@ -113,3 +172,5 @@ removeButton = Button(root, text="Remove Entry(s)", padx=50, state=DISABLED, com
 removeButton.grid(row=8, column=1)
 
 root.mainloop()
+
+saveTasks()
