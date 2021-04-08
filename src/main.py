@@ -1,5 +1,5 @@
 from tkinter import *
-import panas as pd
+import pandas as pd
 import pickle
 
 root = Tk()
