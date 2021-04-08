@@ -5,7 +5,6 @@ import pickle
 root = Tk()
 root.geometry("800x500")
 root.title("Tasks to be Completed")
-numItems = 0
 checklist = []
 
 # it SHOULD delete everything that was checked...not yet working right
@@ -18,7 +17,6 @@ def removeAll(warning):
             break
         if checklist[i-numRemoved].var.get() == 1:
             checklist[i-numRemoved].c.destroy()
-            numItems -= 1
             checklist.pop(i-numRemoved)
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j+1, column=1)
@@ -100,7 +98,6 @@ def init_dates(month, day, year, hour, minute):
 
         
 def pushToList(item, month, day, year, hour, minute):
-    global numItems
     global checklist
     
     # prints new item to main window as long as something was typed in
@@ -108,13 +105,12 @@ def pushToList(item, month, day, year, hour, minute):
         e = entry(item)
         e.dateTime = dateTime(month, day, year, hour, minute)
         checklist.append(e)
-        checklist[numItems].c.grid(row=len(checklist)+1, column=1)
+        checklist[len(checklist)-1].c.grid(row=len(checklist)+1, column=1)
         dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
-        dateLabel.grid(row=numItems, column=2)
+        dateLabel.grid(row=len(checklist)+1, column=2)
     # remove congratulatory message if new work is added
-        if numItems == 0:
+        if len(checklist) == 0:
             noWork.destroy()
-        numItems += 1
 
 # Opens a new window for the user to input a task
 def addItem():
@@ -162,7 +158,7 @@ def saveTasks():
 loadTasks()
 
 # If there are no tasks left, print a congratulations
-if numItems == 0:
+if len(checklist) == 0:
     noWork = Label(root, text="You've finished all of your work. Great job!")
     noWork.grid(row=0, column=0)
 
