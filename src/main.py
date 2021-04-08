@@ -54,7 +54,7 @@ class entry():
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
 
-def pushToList(item):
+def pushToList(item, month, day, year, hour, minute):
     global numItems
     global checklist
 
@@ -62,6 +62,8 @@ def pushToList(item):
     if item != "":
         checklist.append(entry(item))
         checklist[numItems].c.grid(row=numItems, column=1)
+        dateLabel = Label(root, text=month + "/" + day + "/" + year + " " + hour + ":" + minute)
+        dateLabel.grid(row=numItems, column=2)
     # remove congratulatory message if new work is added
         if numItems == 0:
             noWork.destroy()
@@ -75,17 +77,23 @@ def addItem():
     e = Entry(itemEntry)
     e.grid(row=0, column=1)
     monthLabel = Label(itemEntry, text="Month:").grid(row=2, column=0)
-    month = Entry(itemEntry).grid(row=2, column=1)
+    month = Entry(itemEntry)
+    month.grid(row=2, column=1)
     dayLabel = Label(itemEntry, text="Day:").grid(row=3, column=0)
-    day = Entry(itemEntry).grid(row=3, column=1)
+    day = Entry(itemEntry)
+    day.grid(row=3, column=1)
     yearLabel = Label(itemEntry, text="Year:").grid(row=4, column=0)
-    year = Entry(itemEntry).grid(row=4, column=1)
+    year = Entry(itemEntry)
+    year.grid(row=4, column=1)
     hourLabel = Label(itemEntry, text="Hour:").grid(row=5, column=0)
-    hour = Entry(itemEntry).grid(row=5, column=1)
+    hour = Entry(itemEntry)
+    hour.grid(row=5, column=1)
     minLabel = Label(itemEntry, text="Minute:").grid(row=6, column=0)
-    minute = Entry(itemEntry).grid(row=6, column=1) 
+    minute = Entry(itemEntry)
+    minute.grid(row=6, column=1) 
     # Button must be pushed after item is entered
-    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get())).grid(row=7, column=0)
+    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), month.get(),
+    day.get(), year.get(), hour.get(), minute.get())).grid(row=7, column=0)
     close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
 
 # If there are no tasks left, print a congratulations
