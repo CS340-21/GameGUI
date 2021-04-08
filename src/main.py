@@ -72,7 +72,7 @@ class entry():
 
     def __init__(self, item):
         self.var = IntVar()
-        self.textstr = item
+        self.textStr = item
         self.dateTime = None
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
