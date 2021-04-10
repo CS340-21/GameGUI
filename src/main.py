@@ -79,33 +79,6 @@ class entry():
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
 
-# may not need this, waiting to run to check functionality
-def init_dates(month, day, year, hour, minute):
-    try:
-        mo = month.get()
-        print(mo)
-    except:
-        mo = None
-    try:
-        d = day.get()
-    except:
-        d = None
-    try:
-        y = year.get()
-    except:
-        y = None
-    try:
-        h = hour.get()
-    except:
-        h = None
-    try:
-        mi = minute.get()
-    except:
-        mi = None
-
-    return mo, d, y, h, mi
-
-
 def pushToList(item, month, day, year, hour, minute):
     global checklist
 
@@ -147,12 +120,13 @@ def addItem():
 
 
 def loadTasks():
-    try:
-        df = pd.read_pickle('pickled.dat')
-        if not df.empty:
-            print("Not empty")
-    except:
-        print("File does not exist")
+    df = pd.read_pickle('pickled.dat')
+    if not df.empty:
+        for i in range(len(df.axes[0])):
+            print(df.iloc[i])
+            item, month, day, year, hour, minute = df.iloc[i]
+
+            pushToList(item, month, day, year, hour, minute)
 
 
 def saveTasks():
