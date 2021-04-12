@@ -71,7 +71,7 @@ class entry():
 
     def __init__(self, item, date):
         self.var = IntVar()
-        self.textstr = item
+        self.textStr = item
         self.dateTime = date
         self.dateLabel = Label(text=str(self.dateTime.month) + "/" + str(self.dateTime.day) + "/" +
                                     str(self.dateTime.year) + " " + str(self.dateTime.hour) + ":" +
