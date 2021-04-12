@@ -120,13 +120,17 @@ def addItem():
 
 
 def loadTasks():
-    df = pd.read_pickle('pickled.dat')
-    if not df.empty:
-        for i in range(len(df.axes[0])):
-            print(df.iloc[i])
-            item, month, day, year, hour, minute = df.iloc[i]
+    try:
+        df = pd.read_pickle('pickled.dat')
+        if not df.empty:
+            for i in range(len(df.axes[0])):
+                print(df.iloc[i])
+                item, month, day, year, hour, minute = df.iloc[i]
 
-            pushToList(item, month, day, year, hour, minute)
+                pushToList(item, month, day, year, hour, minute)
+
+    except:
+        print("No saved data.")
 
 
 def saveTasks():
