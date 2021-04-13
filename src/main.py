@@ -7,6 +7,22 @@ root.geometry("800x500")
 root.title("Tasks to be Completed")
 checklist = []
 
+# Load in all photos
+photo0 = PhotoImage(file="img1.PNG")
+photo1 = PhotoImage(file="img2.PNG")
+photo2 = PhotoImage(file="img3.PNG")
+photo3 = PhotoImage(file="img4.PNG")
+photo4 = PhotoImage(file="img5.PNG")
+photo5 = PhotoImage(file="img6.PNG")
+photo6 = PhotoImage(file="img7.PNG")
+photo7 = PhotoImage(file="img8.PNG")
+photo8 = PhotoImage(file="img_final.PNG")
+
+label = [Label(root, image = photo0), Label(root, image = photo1), Label(root, image = photo2), Label(root, image = photo3), Label(root, image = photo4), Label(root, image = photo5), Label(root, image = photo6), Label(root, image = photo7), Label(root, image = photo8)]
+
+# Function to be called when task is completed: label[i].grid(column=10, row=10)
+# Function to remove previous image: label[i].grid_remove
+
 
 # it SHOULD delete everything that was checked...not yet working right
 def removeAll(warning):
