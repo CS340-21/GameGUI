@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 root = Tk()
-root.geometry("800x500")
+root.geometry("2000x1000")
 root.title("Tasks to be Completed")
 checklist = []
 
