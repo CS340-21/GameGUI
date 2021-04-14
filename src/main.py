@@ -1,11 +1,13 @@
 from tkinter import *
 import pandas as pd
 import pickle
+from datetime import timedelta, datetime
 
 root = Tk()
 root.geometry("2000x1000")
 root.title("Tasks to be Completed")
 checklist = []
+curTime = datetime.now()
 
 # Load in all photos
 photo0 = PhotoImage(file="img1.PNG")
@@ -38,6 +40,7 @@ def removeAll(warning):
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
+                checklist[j].alertLabel.grid(row=j + 1, column=2)
     warning.destroy()
 
 
@@ -74,36 +77,67 @@ def enableEdit():
 
 
 class dateTime():
-    def __init__(self, month, day, year, hour, minute):
+    def __init__(self, month, day, year, hour, minute, ampm):
         self.month = month
         self.day = day
         self.year = year
         self.hour = hour
         self.minute = minute
+        self.ampm = ampm
 
 
 # Currently stores an individual checkbox, will later store dates
 class entry():
 
-    def __init__(self, item, date):
+    def __init__(self, item, date, alert):
         self.var = IntVar()
         self.textStr = item
         self.dateTime = date
         self.dateLabel = Label(text=str(self.dateTime.month) + "/" + str(self.dateTime.day) + "/" +
                                     str(self.dateTime.year) + " " + str(self.dateTime.hour) + ":" +
                                     str(self.dateTime.minute))
+        self.alertLabel = alert
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
 
-def pushToList(item, month, day, year, hour, minute):
+def pushToList(item, year, month, day, hour, minute, ampm):
     global checklist
 
     # prints new item to main window as long as something was typed in
     if item != "":
-        e = entry(item, dateTime(month, day, year, hour, minute))
+        
+        #Convert to 24 hour time
+        hour = int(hour)
+        if ampm == "am":
+            if hour == 12:
+                hour = 00
+        if ampm == "pm":
+            if hour != 12:
+                hour += 12
+
+        date = datetime(int(year), int(month), int(day), hour, int(minute))
+        
+        difference = date - curTime
+        seconds = difference.total_seconds()
+        
+        if seconds <= 0:
+            alertLabel = Label(text="Past Due", fg="red")
+        elif seconds <= 3600:
+            alertLabel = Label(text="One hour before due", fg="orange")
+        elif seconds <= 86400:
+            alertLabel = Label(text="One day before due", fg="green")
+        elif seconds <= 604800:
+            alertLabel = Label(text="Due within a week", fg="blue")
+        else:
+            alertLabel = Label(text="")
+        
+        e = entry(item, date, alertLabel)
         checklist.append(e)
         checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
         checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
+        checklist[len(checklist)-1].alertLabel.grid(row=len(checklist), column=2)
+        
+        
 
 
 # Opens a new window for the user to input a task
@@ -128,11 +162,13 @@ def addItem():
     minLabel = Label(itemEntry, text="Minute:").grid(row=6, column=0)
     minute = Entry(itemEntry)
     minute.grid(row=6, column=1)
-    # Button must be pushed after item is entered
-    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), month.get(),
-                                                                            day.get(), year.get(), hour.get(),
-                                                                            minute.get())).grid(row=7, column=0)
-    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
+    ampmLabel = Label(itemEntry, text="AM/PM:").grid(row=7, column=0)
+    ampm = Entry(itemEntry)
+    ampm.grid(row=7, column=1)
+    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), year.get(),
+                                                                            month.get(), day.get(), hour.get(),
+                                                                            minute.get(), ampm.get())).grid(row=8, column=0)
+    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=8, column=1)
 
 
 def loadTasks():
