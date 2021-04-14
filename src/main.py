@@ -108,7 +108,7 @@ def pushToList(item, year, month, day, hour, minute, ampm):
         
         #Convert to 24 hour time
         hour = int(hour)
-        if ampm == "am":
+        if ampm == "am" or ampm == "AM:
             if hour == 12:
                 hour = 00
         if ampm == "pm":
