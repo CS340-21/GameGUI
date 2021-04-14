@@ -108,12 +108,14 @@ def pushToList(item, year, month, day, hour, minute, ampm):
         
         #Convert to 24 hour time
         hour = int(hour)
-        if ampm == "am" or ampm == "AM:
+        if ampm == "am" or ampm == "AM" or ampm == "Am" or ampm == "aM":
             if hour == 12:
                 hour = 00
-        if ampm == "pm":
+        if ampm == "pm" or ampm == "PM" or ampm == "Pm" or ampm == "pM":
             if hour != 12:
                 hour += 12
+
+        storeDate = dateTime(month, day, year, hour, minute, ampm)
 
         date = datetime(int(year), int(month), int(day), hour, int(minute))
         
@@ -131,7 +133,7 @@ def pushToList(item, year, month, day, hour, minute, ampm):
         else:
             alertLabel = Label(text="")
         
-        e = entry(item, date, alertLabel)
+        e = entry(item, storeDate, alertLabel)      # e = entry(item, date, alertLabel)
         checklist.append(e)
         checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
         checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
@@ -177,20 +179,20 @@ def loadTasks():
         if not df.empty:
             for i in range(len(df.axes[0])):
                 print(df.iloc[i])
-                item, month, day, year, hour, minute = df.iloc[i]
+                item, month, day, year, hour, minute, ampm = df.iloc[i]
 
-                pushToList(item, month, day, year, hour, minute)
+                pushToList(item, year, month, day, hour, minute, ampm)
 
     except:
         print("No saved data.")
 
 
 def saveTasks():
-    df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute'])
+    df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute', 'ampm'])
 
     for i in checklist:
         df = df.append([{'task': i.textStr, 'month': i.dateTime.month, 'day': i.dateTime.day, 'year': i.dateTime.year,
-                         'hour': i.dateTime.hour, 'minute': i.dateTime.minute}])
+                         'hour': i.dateTime.hour, 'minute': i.dateTime.minute, 'ampm': i.dateTime.ampm}])
 
     df.to_pickle('pickled.dat')
 
