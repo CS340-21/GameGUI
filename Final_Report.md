@@ -20,5 +20,18 @@ Although the original idea was from Heather, the current design was discussed an
 ### Project Management
 We did not complete our initial goals due to the design being changed, but our new design met most of its goals. One goal we wanted to successfully implement was the use of graphics in our design to add various designs which changed as the tasks were completed, such as a man climbing to the top of a mountain, a car reaching the finish line of a racetrack, or flowers blooming. However, it was difficult to find a solution to this with the code already produced, so we compromised with the memes/encouraging messages displayed when tasks were completed. We were also limited on time throughout the semester, as some of our team members are about to graduate and had other extensive classes taking up time throughout the week. Our design was meant to be a project that can be expanded upon and upgraded in a variety of ways.
 
+###### Schedule:
+| Week         | Task |
+|--------------|-------------------------------------|
+| Feb 8 - 12   | Finish proposal, research libraries |
+| Feb 15 - 19  | Create rudimentary GUI |
+| Feb 22 - 26  | Software development and implementation |
+| Mar 1 - 5    | Submit status report 1 |
+| Mar 8 - 12   | Implement checklist |
+| Mar 15 - 19  | Submit status report 2 |
+| Mar 22 - 26  | Work on final design and debug GUI |
+| Mar 29 - April 2 | Submit status report 3 |
+| April 2 - April 15 | Upgrade GUI with additional features |
+
 ### Reflection
 Our team did a good job of meeting periodically and keeping everyone involved in the design. We had to compromise as the project design changed completely midway through the semester, but we did not let this hinder our success. Obviously, our original design did not go well. However, the checklist GUI works as intended and has real-world customer value. We typically were good at discussing our plans for the upcoming week so we had periodical goals to follow up on. The software development was not linear, but we took the necessary steps to prepare for the next steps in our design completion. Whenever a new commit was pushed, our team did a good job of testing to troubleshoot any problems in the GUI. We could have done better at managing the assignment of the next steps in the software development, as our production was good at times and stagnant at others. With all this being said, our design was a success, but could've been more of a success.
