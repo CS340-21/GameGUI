@@ -8,6 +8,7 @@ root.geometry("2000x1000")
 root.title("Tasks to be Completed")
 checklist = []
 curTime = datetime.now()
+numDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 # Load in all photos
 photo0 = PhotoImage(file="img1.PNG")
@@ -110,38 +111,84 @@ def pushToList(item, year, month, day, hour, minute, ampm):
     # prints new item to main window as long as something was typed in
     if item != "":
         
-        #Convert to 24 hour time
-        hour = int(hour)
-        if ampm == "am" or ampm == "AM" or ampm == "Am" or ampm == "aM":
-            if hour == 12:
-                hour = 00
-        if ampm == "pm" or ampm == "PM" or ampm == "Pm" or ampm == "pM":
-            if hour != 12:
-                hour += 12
-
-        storeDate = dateTime(month, day, year, hour, minute, ampm)
-
-        date = datetime(int(year), int(month), int(day), hour, int(minute))
-        
-        difference = date - curTime
-        seconds = difference.total_seconds()
-        
-        if seconds <= 0:
-            alertLabel = Label(text="Past Due", fg="red")
-        elif seconds <= 3600:
-            alertLabel = Label(text="One hour before due", fg="orange")
-        elif seconds <= 86400:
-            alertLabel = Label(text="One day before due", fg="green")
-        elif seconds <= 604800:
-            alertLabel = Label(text="Due within a week", fg="blue")
+        errorFlag = False
+        if year == "":
+            errorFlag = True
         else:
-            alertLabel = Label(text="")
+            year = int(year)
+        if month == "":
+            errorFlag = True
+        else:
+            month = int(month)
+        if day == "":
+            errorFlag = True
+        else:
+            day = int(day)
+        if hour != "":
+            hour = int(hour)
+        if minute != "":
+            minute = int(minute)
+        if ampm != "":
+            ampm = ampm.lower()
+
+        if errorFlag == False:
+            if month < 1 or month > 12:
+                errorFlag = True
+            if errorFlag == False:
+                if day < 1 or day > numDays[month - 1]:
+                    errorFlag = True
+            if hour != "":
+                if hour < 1 or hour > 12:
+                    errorFlag = True
+            if minute != "":
+                if minute < 0 or minute > 59:
+                    errorFlag = True
+            if ampm != "":
+                if ampm != "am" and ampm != "pm":
+                    errorFlag = True
         
-        e = entry(item, storeDate, alertLabel)      # e = entry(item, date, alertLabel)
-        checklist.append(e)
-        checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
-        checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
-        checklist[len(checklist)-1].alertLabel.grid(row=len(checklist), column=2)
+        if errorFlag == True:
+            errorWindow = Tk()
+            errorWindow.title("Error")
+            errorWindow.geometry("200x50")
+            errorLabel = Label(errorWindow, text="User input error").pack()
+            close = Button(errorWindow, text="Ok", command=errorWindow.destroy).pack()
+
+        else:
+            storeDate = dateTime(month, day, year, hour, minute, ampm)
+            
+            if ampm != "":
+                #Convert to 24 hour time
+                if ampm == "am":
+                    if hour == 12:
+                        hour = 00
+                if ampm == "pm":
+                    if hour != 12:
+                        hour += 12
+
+                date = datetime(year, month, day, hour, minute)
+        
+                difference = date - curTime
+                seconds = difference.total_seconds()
+        
+                if seconds <= 0:
+                    alertLabel = Label(text="Past Due", fg="red")
+                elif seconds <= 3600:
+                    alertLabel = Label(text="One hour before due", fg="orange")
+                elif seconds <= 86400:
+                    alertLabel = Label(text="One day before due", fg="green")
+                elif seconds <= 604800:
+                    alertLabel = Label(text="Due within a week", fg="blue")
+                else:
+                    alertLabel = Label(text="")
+            else:
+                alertLabel = Label(text="")
+        
+            e = entry(item, storeDate, alertLabel)      # e = entry(item, date, alertLabel)
+            checklist.append(e)
+            checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
+            checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
+            checklist[len(checklist)-1].alertLabel.grid(row=len(checklist), column=2)
         
         
 
@@ -149,6 +196,7 @@ def pushToList(item, year, month, day, hour, minute, ampm):
 # Opens a new window for the user to input a task
 def addItem():
     itemEntry = Tk()
+    itemEntry.title("Enter Task")
     itemEntry.geometry("400x400")
     eLabel = Label(itemEntry, text="Task:").grid(row=0, column=0)
     e = Entry(itemEntry)
