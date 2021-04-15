@@ -36,13 +36,15 @@ def removeAll(warning):
             break
         if checklist[i - numRemoved].var.get() == 1:
             checklist[i - numRemoved].c.destroy()
+            checklist[i - numRemoved].dateLabel.destroy()
+            checklist[i - numRemoved].alertLabel.destroy()
             checklist.pop(i - numRemoved)
+            numRemoved = numRemoved + 1
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
                 checklist[j].alertLabel.grid(row=j + 1, column=2)
     warning.destroy()
-
 
 # A warning pops up before deletion
 def removeEntry():
