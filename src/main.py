@@ -20,7 +20,9 @@ photo6 = PhotoImage(file="img7.PNG")
 photo7 = PhotoImage(file="img8.PNG")
 photo8 = PhotoImage(file="img_final.PNG")
 
-label = [Label(root, image = photo0), Label(root, image = photo1), Label(root, image = photo2), Label(root, image = photo3), Label(root, image = photo4), Label(root, image = photo5), Label(root, image = photo6), Label(root, image = photo7), Label(root, image = photo8)]
+label = [Label(root, image = photo0), Label(root, image = photo1), Label(root, image = photo2), Label(root, image = photo3),
+         Label(root, image = photo4), Label(root, image = photo5), Label(root, image = photo6), Label(root, image = photo7),
+         Label(root, image = photo8)]
 
 # Function to be called when task is completed: label[i].grid(column=10, row=10)
 # Function to remove previous image: label[i].grid_remove
