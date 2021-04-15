@@ -1,11 +1,29 @@
 from tkinter import *
 import pandas as pd
 import pickle
+from datetime import timedelta, datetime
 
 root = Tk()
-root.geometry("800x500")
+root.geometry("2000x1000")
 root.title("Tasks to be Completed")
 checklist = []
+curTime = datetime.now()
+
+# Load in all photos
+photo0 = PhotoImage(file="img1.PNG")
+photo1 = PhotoImage(file="img2.PNG")
+photo2 = PhotoImage(file="img3.PNG")
+photo3 = PhotoImage(file="img4.PNG")
+photo4 = PhotoImage(file="img5.PNG")
+photo5 = PhotoImage(file="img6.PNG")
+photo6 = PhotoImage(file="img7.PNG")
+photo7 = PhotoImage(file="img8.PNG")
+photo8 = PhotoImage(file="img_final.PNG")
+
+label = [Label(root, image = photo0), Label(root, image = photo1), Label(root, image = photo2), Label(root, image = photo3), Label(root, image = photo4), Label(root, image = photo5), Label(root, image = photo6), Label(root, image = photo7), Label(root, image = photo8)]
+
+# Function to be called when task is completed: label[i].grid(column=10, row=10)
+# Function to remove previous image: label[i].grid_remove
 
 
 # it SHOULD delete everything that was checked...not yet working right
@@ -22,6 +40,7 @@ def removeAll(warning):
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
+                checklist[j].alertLabel.grid(row=j + 1, column=2)
     warning.destroy()
 
 
@@ -58,36 +77,69 @@ def enableEdit():
 
 
 class dateTime():
-    def __init__(self, month, day, year, hour, minute):
+    def __init__(self, month, day, year, hour, minute, ampm):
         self.month = month
         self.day = day
         self.year = year
         self.hour = hour
         self.minute = minute
+        self.ampm = ampm
 
 
 # Currently stores an individual checkbox, will later store dates
 class entry():
 
-    def __init__(self, item, date):
+    def __init__(self, item, date, alert):
         self.var = IntVar()
         self.textStr = item
         self.dateTime = date
         self.dateLabel = Label(text=str(self.dateTime.month) + "/" + str(self.dateTime.day) + "/" +
                                     str(self.dateTime.year) + " " + str(self.dateTime.hour) + ":" +
                                     str(self.dateTime.minute))
+        self.alertLabel = alert
         self.c = Checkbutton(root, variable=self.var, text=item, command=enableEdit)
 
 
-def pushToList(item, month, day, year, hour, minute):
+def pushToList(item, year, month, day, hour, minute, ampm):
     global checklist
 
     # prints new item to main window as long as something was typed in
     if item != "":
-        e = entry(item, dateTime(month, day, year, hour, minute))
+        
+        #Convert to 24 hour time
+        hour = int(hour)
+        if ampm == "am" or ampm == "AM" or ampm == "Am" or ampm == "aM":
+            if hour == 12:
+                hour = 00
+        if ampm == "pm" or ampm == "PM" or ampm == "Pm" or ampm == "pM":
+            if hour != 12:
+                hour += 12
+
+        storeDate = dateTime(month, day, year, hour, minute, ampm)
+
+        date = datetime(int(year), int(month), int(day), hour, int(minute))
+        
+        difference = date - curTime
+        seconds = difference.total_seconds()
+        
+        if seconds <= 0:
+            alertLabel = Label(text="Past Due", fg="red")
+        elif seconds <= 3600:
+            alertLabel = Label(text="One hour before due", fg="orange")
+        elif seconds <= 86400:
+            alertLabel = Label(text="One day before due", fg="green")
+        elif seconds <= 604800:
+            alertLabel = Label(text="Due within a week", fg="blue")
+        else:
+            alertLabel = Label(text="")
+        
+        e = entry(item, storeDate, alertLabel)      # e = entry(item, date, alertLabel)
         checklist.append(e)
         checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
         checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
+        checklist[len(checklist)-1].alertLabel.grid(row=len(checklist), column=2)
+        
+        
 
 
 # Opens a new window for the user to input a task
@@ -112,11 +164,13 @@ def addItem():
     minLabel = Label(itemEntry, text="Minute:").grid(row=6, column=0)
     minute = Entry(itemEntry)
     minute.grid(row=6, column=1)
-    # Button must be pushed after item is entered
-    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), month.get(),
-                                                                            day.get(), year.get(), hour.get(),
-                                                                            minute.get())).grid(row=7, column=0)
-    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=7, column=1)
+    ampmLabel = Label(itemEntry, text="AM/PM:").grid(row=7, column=0)
+    ampm = Entry(itemEntry)
+    ampm.grid(row=7, column=1)
+    confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), year.get(),
+                                                                            month.get(), day.get(), hour.get(),
+                                                                            minute.get(), ampm.get())).grid(row=8, column=0)
+    close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=8, column=1)
 
 
 def loadTasks():
@@ -125,20 +179,20 @@ def loadTasks():
         if not df.empty:
             for i in range(len(df.axes[0])):
                 print(df.iloc[i])
-                item, month, day, year, hour, minute = df.iloc[i]
+                item, month, day, year, hour, minute, ampm = df.iloc[i]
 
-                pushToList(item, month, day, year, hour, minute)
+                pushToList(item, year, month, day, hour, minute, ampm)
 
     except:
         print("No saved data.")
 
 
 def saveTasks():
-    df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute'])
+    df = pd.DataFrame(columns=['task', 'month', 'day', 'year', 'hour', 'minute', 'ampm'])
 
     for i in checklist:
         df = df.append([{'task': i.textStr, 'month': i.dateTime.month, 'day': i.dateTime.day, 'year': i.dateTime.year,
-                         'hour': i.dateTime.hour, 'minute': i.dateTime.minute}])
+                         'hour': i.dateTime.hour, 'minute': i.dateTime.minute, 'ampm': i.dateTime.ampm}])
 
     df.to_pickle('pickled.dat')
 
