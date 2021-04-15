@@ -12,7 +12,7 @@ Comparing the two designs, the checklist GUI has more realistic value for the cu
 ### Technology
 Our code is powered through three main Python libraries: Tkinter, Pandas, and Pickle. Tkinter is the backbone of the project which creates the GUI, the buttons, and the images produced when a task is completed. Pandas was used to convert the objects to proper types to be used in storing the data and saving it using Pickle. Once the data is saved, it can then be accessed the next time the user opens the program to pick up where they left off. We have tested the software by adding a variety of tasks, removing the tasks, and closing/reopening the software to ensure the design is user-sustainable. 
 
-Still need to include screenshots of command line while running to show each process works correctly
+![Diagram](term.PNG)
 
 ### Team
 Although the original idea was from Heather, the current design was discussed and created by the entire team. Sam began our production by studying Tkinter and creating a basic GUI to support our project, which was expanded upon by the group. Heather studied Pandas and Pickle to create a save file and update the design to be more sustainable. The team member roles were mainly flexible. We began our production by meeting weekly, which transitioned to bi-weekly when lecture times allowed us to work on the project together. During our meetings, we would typically work individually, but ask questions to our teammates to guide through our design ideas and plan our future goals for implementation.
