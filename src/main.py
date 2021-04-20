@@ -1,6 +1,7 @@
 from tkinter import *
 import pandas as pd
 import pickle
+import random
 from datetime import timedelta, datetime
 import random
 
@@ -13,33 +14,19 @@ curTime = datetime.now()
 
 
 # Load in all photos
-photo0 = PhotoImage(file="img1.PNG")
-photo1 = PhotoImage(file="img2.PNG")
-photo2 = PhotoImage(file="img3.PNG")
-photo3 = PhotoImage(file="img4.PNG")
-photo4 = PhotoImage(file="img5.PNG")
-photo5 = PhotoImage(file="img6.PNG")
-photo6 = PhotoImage(file="img7.PNG")
-photo7 = PhotoImage(file="img8.PNG")
-photo8 = PhotoImage(file="img_final.PNG")
+photo0 = PhotoImage(file="../img1.PNG")
+photo1 = PhotoImage(file="../img2.PNG")
+photo2 = PhotoImage(file="../img3.PNG")
+photo3 = PhotoImage(file="../img4.PNG")
+photo4 = PhotoImage(file="../img5.PNG")
+photo5 = PhotoImage(file="../img6.PNG")
+photo6 = PhotoImage(file="../img7.PNG")
+photo7 = PhotoImage(file="../img8.PNG")
+photo8 = PhotoImage(file="../img_final.PNG")
 
 label = [Label(root, image=photo0), Label(root, image=photo1), Label(root, image=photo2), Label(root, image=photo3),
          Label(root, image=photo4), Label(root, image=photo5), Label(root, image=photo6), Label(root, image=photo7),
          Label(root, image=photo8)]
-
-
-
-
-
-if len(checklist) != 0:
-    r = random.randint(0, 7)
-    label[r].grid(column=10, row=10)
-    label[r].after(1000, label[r].destroy)
-else:
-    label[8].grid(column=10, row=10)
-    label[8].after(1000, label[8].destroy)
-
-
 
 # it SHOULD delete everything that was checked...not yet working right
 def removeAll(warning):
@@ -59,6 +46,15 @@ def removeAll(warning):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
                 checklist[j].alertLabel.grid(row=j + 1, column=2)
+
+    if len(checklist) != 0:
+        r = random.randint(0, 7)
+        label[r].grid(column=10, row=10)
+        label[r].after(1000, label[r].destroy)
+    else:
+        label[8].grid(column=10, row=10)
+        label[8].after(1000, label[8].destroy)
+
     warning.destroy()
 
 
@@ -67,7 +63,7 @@ def removeEntry():
     warning = Tk()
     l = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column=1)
     no = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
-    yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0, command = label[0].grid(column=10, row=10))
+    yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0)
 
 
 
