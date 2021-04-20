@@ -3,12 +3,13 @@ import pandas as pd
 import pickle
 from datetime import timedelta, datetime
 
+i = int()
 root = Tk()
 root.geometry("2000x1000")
 root.title("Tasks to be Completed")
 checklist = []
 curTime = datetime.now()
-numDays = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
 
 # Load in all photos
 photo0 = PhotoImage(file="img1.PNG")
@@ -21,12 +22,22 @@ photo6 = PhotoImage(file="img7.PNG")
 photo7 = PhotoImage(file="img8.PNG")
 photo8 = PhotoImage(file="img_final.PNG")
 
-label = [Label(root, image = photo0), Label(root, image = photo1), Label(root, image = photo2), Label(root, image = photo3),
-         Label(root, image = photo4), Label(root, image = photo5), Label(root, image = photo6), Label(root, image = photo7),
-         Label(root, image = photo8)]
+label = [Label(root, image=photo0), Label(root, image=photo1), Label(root, image=photo2), Label(root, image=photo3),
+         Label(root, image=photo4), Label(root, image=photo5), Label(root, image=photo6), Label(root, image=photo7),
+         Label(root, image=photo8)]
 
-# Function to be called when task is completed: label[i].grid(column=10, row=10)
-# Function to remove previous image: label[i].grid_remove
+
+
+
+
+if len(checklist) != 0:
+    r = random.randint(0,7)
+    label[r].grid(column=10, row=10)
+    label[r].after(1000, label[r].destroy)
+else:
+    label[8].grid(column=10, row=10)
+    label[8].after(1000, label[8].destroy)
+
 
 
 # it SHOULD delete everything that was checked...not yet working right
@@ -39,22 +50,22 @@ def removeAll(warning):
             break
         if checklist[i - numRemoved].var.get() == 1:
             checklist[i - numRemoved].c.destroy()
-            checklist[i - numRemoved].dateLabel.destroy()
-            checklist[i - numRemoved].alertLabel.destroy()
             checklist.pop(i - numRemoved)
-            numRemoved = numRemoved + 1
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
                 checklist[j].alertLabel.grid(row=j + 1, column=2)
     warning.destroy()
 
+
 # A warning pops up before deletion
 def removeEntry():
     warning = Tk()
     l = Label(warning, text="Are you sure you want to remove the selected entry(s)?").grid(row=0, column=1)
     no = Button(warning, text="No", padx=100, command=warning.destroy).grid(row=1, column=2)
-    yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0)
+    yes = Button(warning, text="Yes", padx=100, command=lambda: removeAll(warning)).grid(row=1, column=0, command = label[0].grid(column=10, row=10))
+
+
 
 
 def editEntry():
@@ -110,93 +121,44 @@ def pushToList(item, year, month, day, hour, minute, ampm):
 
     # prints new item to main window as long as something was typed in
     if item != "":
-        
-        errorFlag = False
-        if year == "":
-            errorFlag = True
-        else:
-            year = int(year)
-        if month == "":
-            errorFlag = True
-        else:
-            month = int(month)
-        if day == "":
-            errorFlag = True
-        else:
-            day = int(day)
-        if hour != "":
-            hour = int(hour)
-        if minute != "":
-            minute = int(minute)
-        if ampm != "":
-            ampm = ampm.lower()
 
-        if errorFlag == False:
-            if month < 1 or month > 12:
-                errorFlag = True
-            if errorFlag == False:
-                if day < 1 or day > numDays[month - 1]:
-                    errorFlag = True
-            if hour != "":
-                if hour < 1 or hour > 12:
-                    errorFlag = True
-            if minute != "":
-                if minute < 0 or minute > 59:
-                    errorFlag = True
-            if ampm != "":
-                if ampm != "am" and ampm != "pm":
-                    errorFlag = True
-        
-        if errorFlag == True:
-            errorWindow = Tk()
-            errorWindow.title("Error")
-            errorWindow.geometry("200x50")
-            errorLabel = Label(errorWindow, text="User input error").pack()
-            close = Button(errorWindow, text="Ok", command=errorWindow.destroy).pack()
+        # Convert to 24 hour time
+        hour = int(hour)
+        if ampm == "am" or ampm == "AM" or ampm == "Am" or ampm == "aM":
+            if hour == 12:
+                hour = 00
+        if ampm == "pm" or ampm == "PM" or ampm == "Pm" or ampm == "pM":
+            if hour != 12:
+                hour += 12
 
+        storeDate = dateTime(month, day, year, hour, minute, ampm)
+
+        date = datetime(int(year), int(month), int(day), hour, int(minute))
+
+        difference = date - curTime
+        seconds = difference.total_seconds()
+
+        if seconds <= 0:
+            alertLabel = Label(text="Past Due", fg="red")
+        elif seconds <= 3600:
+            alertLabel = Label(text="One hour before due", fg="orange")
+        elif seconds <= 86400:
+            alertLabel = Label(text="One day before due", fg="green")
+        elif seconds <= 604800:
+            alertLabel = Label(text="Due within a week", fg="blue")
         else:
-            storeDate = dateTime(month, day, year, hour, minute, ampm)
-            
-            if ampm != "":
-                #Convert to 24 hour time
-                if ampm == "am":
-                    if hour == 12:
-                        hour = 00
-                if ampm == "pm":
-                    if hour != 12:
-                        hour += 12
+            alertLabel = Label(text="")
 
-                date = datetime(year, month, day, hour, minute)
-        
-                difference = date - curTime
-                seconds = difference.total_seconds()
-        
-                if seconds <= 0:
-                    alertLabel = Label(text="Past Due", fg="red")
-                elif seconds <= 3600:
-                    alertLabel = Label(text="One hour before due", fg="orange")
-                elif seconds <= 86400:
-                    alertLabel = Label(text="One day before due", fg="green")
-                elif seconds <= 604800:
-                    alertLabel = Label(text="Due within a week", fg="blue")
-                else:
-                    alertLabel = Label(text="")
-            else:
-                alertLabel = Label(text="")
-        
-            e = entry(item, storeDate, alertLabel)      # e = entry(item, date, alertLabel)
-            checklist.append(e)
-            checklist[len(checklist)-1].c.grid(row=len(checklist), column=0)
-            checklist[len(checklist)-1].dateLabel.grid(row=len(checklist), column=1)
-            checklist[len(checklist)-1].alertLabel.grid(row=len(checklist), column=2)
-        
-        
+        e = entry(item, storeDate, alertLabel)  # e = entry(item, date, alertLabel)
+        checklist.append(e)
+        checklist[len(checklist) - 1].c.grid(row=len(checklist), column=0)
+        checklist[len(checklist) - 1].dateLabel.grid(row=len(checklist), column=1)
+        checklist[len(checklist) - 1].alertLabel.grid(row=len(checklist), column=2)
 
 
 # Opens a new window for the user to input a task
 def addItem():
     itemEntry = Tk()
-    itemEntry.title("Enter Task")
     itemEntry.geometry("400x400")
     eLabel = Label(itemEntry, text="Task:").grid(row=0, column=0)
     e = Entry(itemEntry)
@@ -221,7 +183,8 @@ def addItem():
     ampm.grid(row=7, column=1)
     confirm = Button(itemEntry, text='Add Item', command=lambda: pushToList(e.get(), year.get(),
                                                                             month.get(), day.get(), hour.get(),
-                                                                            minute.get(), ampm.get())).grid(row=8, column=0)
+                                                                            minute.get(), ampm.get())).grid(row=8,
+                                                                                                            column=0)
     close = Button(itemEntry, text="Close", command=itemEntry.destroy).grid(row=8, column=1)
 
 
