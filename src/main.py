@@ -2,6 +2,7 @@ from tkinter import *
 import pandas as pd
 import pickle
 from datetime import timedelta, datetime
+import random
 
 i = int()
 root = Tk()
@@ -31,7 +32,7 @@ label = [Label(root, image=photo0), Label(root, image=photo1), Label(root, image
 
 
 if len(checklist) != 0:
-    r = random.randint(0,7)
+    r = random.randint(0, 7)
     label[r].grid(column=10, row=10)
     label[r].after(1000, label[r].destroy)
 else:
@@ -50,7 +51,10 @@ def removeAll(warning):
             break
         if checklist[i - numRemoved].var.get() == 1:
             checklist[i - numRemoved].c.destroy()
+            checklist[i - numRemoved].dateLabel.destroy()
+            checklist[i - numRemoved].alertLabel.destroy()
             checklist.pop(i - numRemoved)
+            numRemoved = numRemoved + 1
             for j in range(len(checklist)):
                 checklist[j].c.grid(row=j + 1, column=0)
                 checklist[j].dateLabel.grid(row=j + 1, column=1)
